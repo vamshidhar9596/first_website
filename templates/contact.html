@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - My Portfolio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>My Portfolio Website</h1>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('messages') }}">Messages</a></li>
+                <li><a href="{{ url_for('subscribers') }}">Subscribers</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main>
+        <section class="contact-hero">
+            <h1>Contact Us</h1>
+            <p>Send us a message and it will be stored in our database!</p>
+        </section>
+
+        <section class="contact-form-section">
+            <div class="form-container">
+                <form method="POST" class="contact-form">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="form-group">
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-input") }}
+                        {% if form.name.errors %}
+                            <ul class="form-errors">
+                                {% for error in form.name.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.email.label(class="form-label") }}
+                        {{ form.email(class="form-input") }}
+                        {% if form.email.errors %}
+                            <ul class="form-errors">
+                                {% for error in form.email.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.subject.label(class="form-label") }}
+                        {{ form.subject(class="form-input") }}
+                        {% if form.subject.errors %}
+                            <ul class="form-errors">
+                                {% for error in form.subject.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.message.label(class="form-label") }}
+                        {{ form.message(class="form-textarea") }}
+                        {% if form.message.errors %}
+                            <ul class="form-errors">
+                                {% for error in form.message.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.submit(class="form-submit") }}
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 My Portfolio Website. Built with Flask + SQLAlchemy!</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Subscribers - Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>My Portfolio Website</h1>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('messages') }}">Messages</a></li>
+                <li><a href="{{ url_for('subscribers') }}">Subscribers</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="admin-hero">
+            <h1>👥 All Subscribers</h1>
+            <p>Newsletter subscribers from the database</p>
+            <div class="admin-stats">
+                <span class="stat-badge">Total Subscribers: {{ subscribers|length }}</span>
+            </div>
+        </section>
+
+        <section class="admin-content">
+            {% if subscribers %}
+                <div class="subscribers-table">
+                    <div class="table-header">
+                        <div class="table-actions">
+                            <button onclick="exportEmails()" class="action-btn primary">
+                                📧 Export All Emails
+                            </button>
+                            <button onclick="selectAll()" class="action-btn">
+                                ✅ Select All
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="subscribers-grid">
+                        {% for subscriber in subscribers %}
+                        <div class="subscriber-card">
+                            <div class="subscriber-info">
+                                <input type="checkbox" class="subscriber-checkbox" 
+                                       value="{{ subscriber.email }}" id="sub-{{ loop.index }}">
+                                <label for="sub-{{ loop.index }}">
+                                    <h3>{{ subscriber.name }}</h3>
+                                    <p class="email">{{ subscriber.email }}</p>
+                                    <span class="join-date">
+                                        Joined: {{ subscriber.created_at.strftime('%Y-%m-%d') }}
+                                    </span>
+                                </label>
+                            </div>
+                            
+                            <div class="subscriber-actions">
+                                <button onclick="copyEmail('{{ subscriber.email }}')" class="action-btn small">
+                                    📋 Copy
+                                </button>
+                                <button onclick="sendEmail('{{ subscriber.email }}')" class="action-btn small">
+                                    ✉️ Email
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <h2>👤 No Subscribers Yet</h2>
+                    <p>Newsletter signups will appear here when people subscribe.</p>
+                    <a href="{{ url_for('home') }}" class="cta-button">Go to Homepage</a>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 My Portfolio Website. Built with Flask + SQLAlchemy!</p>
+    </footer>
+
+    <script>
+        function copyEmail(email) {
+            navigator.clipboard.writeText(email).then(() => {
+                alert('Email copied to clipboard: ' + email);
+            });
+        }
+
+        function sendEmail(email) {
+            const subject = 'Newsletter from My Portfolio Website';
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
+            window.open(mailtoLink);
+        }
+
+        function selectAll() {
+            const checkboxes = document.querySelectorAll('.subscriber-checkbox');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            
+            checkboxes.forEach(cb => {
+                cb.checked = !allChecked;
+            });
+        }
+
+        function exportEmails() {
+            const checkboxes = document.querySelectorAll('.subscriber-checkbox:checked');
+            const emails = Array.from(checkboxes).map(cb => cb.value);
+            
+            if (emails.length === 0) {
+                alert('No subscribers selected. Select some subscribers first!');
+                return;
+            }
+
+            const emailList = emails.join(', ');
+            const subject = 'Newsletter from My Portfolio Website';
+            const mailtoLink = `mailto:?bcc=${encodeURIComponent(emailList)}&subject=${encodeURIComponent(subject)}`;
+            
+            // Also copy to clipboard
+            navigator.clipboard.writeText(emails.join('\n')).then(() => {
+                alert(`${emails.length} email addresses copied to clipboard and email client opened!`);
+                window.open(mailtoLink);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Messages - Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>My Portfolio Website</h1>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('messages') }}">Messages</a></li>
+                <li><a href="{{ url_for('subscribers') }}">Subscribers</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="admin-hero">
+            <h1>📬 All Messages</h1>
+            <p>Contact form submissions from the database</p>
+            <div class="admin-stats">
+                <span class="stat-badge">Total Messages: {{ messages|length }}</span>
+            </div>
+        </section>
+
+        <section class="admin-content">
+            {% if messages %}
+                <div class="messages-grid">
+                    {% for message in messages %}
+                    <div class="admin-message-card">
+                        <div class="message-header">
+                            <h3>{{ message.subject }}</h3>
+                            <span class="message-date">{{ message.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                        </div>
+                        
+                        <div class="message-info">
+                            <p><strong>From:</strong> {{ message.name }}</p>
+                            <p><strong>Email:</strong> 
+                                <a href="mailto:{{ message.email }}">{{ message.email }}</a>
+                            </p>
+                        </div>
+                        
+                        <div class="message-content">
+                            <h4>Message:</h4>
+                            <p>{{ message.message }}</p>
+                        </div>
+                        
+                        <div class="message-actions">
+                            <button onclick="copyEmail('{{ message.email }}')" class="action-btn">
+                                📧 Copy Email
+                            </button>
+                            <button onclick="replyTo('{{ message.name }}', '{{ message.email }}')" class="action-btn">
+                                💬 Reply
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <h2>📭 No Messages Yet</h2>
+                    <p>Contact form submissions will appear here when received.</p>
+                    <a href="{{ url_for('contact') }}" class="cta-button">Go to Contact Form</a>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 My Portfolio Website. Built with Flask + SQLAlchemy!</p>
+    </footer>
+
+    <script>
+        function copyEmail(email) {
+            navigator.clipboard.writeText(email).then(() => {
+                alert('Email copied to clipboard: ' + email);
+            });
+        }
+
+        function replyTo(name, email) {
+            const subject = `Re: Your message from ${name}`;
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
+            window.open(mailtoLink);
+        }
+    </script>
+</body>
+</html>

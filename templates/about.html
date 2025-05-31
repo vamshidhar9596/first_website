@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - My Portfolio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>My Portfolio Website</h1>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('messages') }}">Messages</a></li>
+                <li><a href="{{ url_for('subscribers') }}">Subscribers</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="about-hero">
+            <h1>About Me</h1>
+            <p>Welcome to my journey in web development!</p>
+        </section>
+
+        <section class="about-content">
+            <div class="about-card">
+                <h2>🚀 My Journey</h2>
+                <p>I built this website to learn Python Flask development with a real database backend. This project demonstrates my skills in:</p>
+                <ul>
+                    <li>Python Programming</li>
+                    <li>Flask Web Framework</li>
+                    <li>SQLite Database Management</li>
+                    <li>HTML, CSS, and JavaScript</li>
+                    <li>Form Handling and Validation</li>
+                </ul>
+            </div>
+
+            <div class="about-card">
+                <h2>💻 Technical Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h4>Backend</h4>
+                        <p>Python Flask + SQLAlchemy</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Database</h4>
+                        <p>SQLite with ORM</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Frontend</h4>
+                        <p>HTML5, CSS3, JavaScript</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Tools</h4>
+                        <p>VS Code, Virtual Environment</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-card">
+                <h2>🎯 Project Features</h2>
+                <div class="features-list">
+                    <div class="feature-item">
+                        <span class="feature-icon">📝</span>
+                        <div>
+                            <h4>Contact Form</h4>
+                            <p>Validated contact forms with database storage</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">👥</span>
+                        <div>
+                            <h4>User Management</h4>
+                            <p>Newsletter subscription system</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📊</span>
+                        <div>
+                            <h4>Admin Dashboard</h4>
+                            <p>View messages and subscribers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 My Portfolio Website. Built with Flask + SQLAlchemy!</p>
+    </footer>
+</body>
+</html>

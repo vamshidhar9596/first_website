@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio Website</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>My Portfolio Website</h1>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('messages') }}">Messages</a></li>
+                <li><a href="{{ url_for('subscribers') }}">Subscribers</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main>
+        <section class="hero">
+            <h1>Welcome to My Website!</h1>
+            <p>Now powered by a real database! 🗄️</p>
+            <button onclick="showStats()">Show Database Stats</button>
+        </section>
+
+        <!-- Database Statistics -->
+        <section class="stats">
+            <div class="stat-card">
+                <h3>📧 Subscribers</h3>
+                <p class="stat-number">{{ user_count }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>💬 Messages</h3>
+                <p class="stat-number">{{ message_count }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>🎉 Database</h3>
+                <p class="stat-text">Active</p>
+            </div>
+        </section>
+
+        <!-- Simple Newsletter Subscription -->
+        <section class="newsletter">
+            <h2>Subscribe to Our Newsletter</h2>
+            <form method="POST" action="{{ url_for('subscribe') }}" class="subscribe-form">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </section>
+
+        <!-- Recent Messages -->
+        {% if recent_messages %}
+        <section class="recent-messages">
+            <h2>Recent Messages</h2>
+            <div class="message-grid">
+                {% for message in recent_messages %}
+                <div class="message-card">
+                    <h4>{{ message.subject }}</h4>
+                    <p><strong>From:</strong> {{ message.name }}</p>
+                    <p>{{ message.message[:100] }}{% if message.message|length > 100 %}...{% endif %}</p>
+                    <small>{{ message.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <section class="features">
+            <div class="feature-card">
+                <h3>🗄️ Database Powered</h3>
+                <p>SQLite database with SQLAlchemy</p>
+            </div>
+            <div class="feature-card">
+                <h3>📝 Contact Forms</h3>
+                <p>Form validation and data storage</p>
+            </div>
+            <div class="feature-card">
+                <h3>👥 User Management</h3>
+                <p>Subscriber tracking and management</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 My Portfolio Website. Built with Flask + SQLAlchemy!</p>
+    </footer>
+
+    <script>
+        function showStats() {
+            alert(`Database Statistics:\n📧 Subscribers: {{ user_count }}\n💬 Messages: {{ message_count }}\n🗄️ Database: SQLite + SQLAlchemy`);
+        }
+    </script>
+</body>
+</html>
